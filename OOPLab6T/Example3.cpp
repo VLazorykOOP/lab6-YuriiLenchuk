@@ -3,91 +3,111 @@
 #include <string>
 using namespace std;
 namespace SpaceExample3 {
-    // MultipleiInherance.cpp 
-// Ієрархія типів складається з сутностей: 
-// машина, пасажирський транспорт і автобус.
-//
-
-
-    class Car {
+    class Employee {
     protected:
-        string marka;
-        float power;
-        int numberOfWheels;
-    public:
-        Car() : marka("Neoplan"), power(5.2f), numberOfWheels(6) {
-        }
-        Car(string m, float p, int nw) : marka(m), power(p), numberOfWheels(nw) {
-        }
-        string getMarka() { return marka; }
-        void setMarka(string m) { marka = m; }
-        float getPower() {
-            return power;
-        }
-        void setPower(float p) {
-            power = p;
-        }
-        int getNumberOfWheels() {
-            return numberOfWheels;
-        }
-        void setNumberOfWheels(int n) {
-            numberOfWheels = n;
-        }
-        string toString() {
-            string r = marka + "\t" + to_string(power) + "\t" + to_string(numberOfWheels) + "\t";
-            return r;
-        }
-    };
+        string name;
+        int employeeID;
 
-    class PassengerTransport {
+    public:
+        Employee(const string& empName, int empID) : name(empName), employeeID(empID) {}
+
+        virtual ~Employee() {}
+
+        virtual void displayInfo() const {
+            cout << "Employee Name: " << name << endl;
+            cout << "Employee ID: " << employeeID << endl;
+        }
+
+        friend ostream& operator<<(ostream& os, const Employee& employee);
+        friend istream& operator>>(istream& is, Employee& employee);
+    };
+    ostream& operator<<(ostream& os, const Employee& employee) {
+        os << "Employee Name: " << employee.name << endl;
+        os << "Employee ID: " << employee.employeeID << endl;
+        return os;
+    }
+
+    istream& operator>>(istream& is, Employee& employee) {
+        cout << "Enter Employee Name: ";
+        is >> employee.name;
+        cout << "Enter Employee ID: ";
+        is >> employee.employeeID;
+        return is;
+    }
+
+    class Parent {
     protected:
-        int flightNumber;
-        int numberOfPassengerSeats;
-    public:
-        PassengerTransport() : flightNumber(101), numberOfPassengerSeats(45) {}
-        PassengerTransport(int f, int n) : flightNumber(f), numberOfPassengerSeats(n) {}
-        int  getFlightNumber() { return flightNumber; }
-        void setFlightNumber(int f) { flightNumber = f; }
-        int getNumberOfPassengerSeats() { return numberOfPassengerSeats; }
-        void setnumberOfPassengerSeats(int n) { numberOfPassengerSeats = n; }
-        string toString() {
-            string r = to_string(flightNumber) + "\t" + to_string(numberOfPassengerSeats) + "\t";
-            return r;
-        }
-    };
-    class AutoBus : public Car, public  PassengerTransport
-    {
-        string busRoute;
-    public:
-        AutoBus() : busRoute("Kyiv-Chernivci") {}
-        AutoBus(string m, float p, int nw, int f, int n, string bs)
-            : Car(m, p, nw), PassengerTransport(f, n), busRoute(bs) {}
-        string getbusRoute() {
-            return busRoute;
-        }
-        void setbusRoute(string bs) { busRoute = bs; }
+        string parentName;
+        int age;
 
-        string toString() {
-            string r = Car::toString() + PassengerTransport::toString() + busRoute;
-            return r;
+    public:
+        Parent(const string& pName, int pAge) : parentName(pName), age(pAge) {}
+
+        virtual ~Parent() {}
+
+        virtual void displayInfo() const {
+            cout << "Parent Name: " << parentName << endl;
+            cout << "Age: " << age << endl;
         }
+
+        friend ostream& operator<<(ostream& os, const Parent& parent);
+        friend istream& operator>>(istream& is, Parent& parent);
     };
+    ostream& operator<<(ostream& os, const Parent& parent) {
+        os << "Parent Name: " << parent.parentName << endl;
+        os << "Age: " << parent.age << endl;
+        return os;
+    }
+
+    istream& operator>>(istream& is, Parent& parent) {
+        cout << "Enter Parent Name: ";
+        is >> parent.parentName;
+        cout << "Enter Age: ";
+        is >> parent.age;
+        return is;
+    }
+
+    class Employee_Parent : public Employee, public Parent {
+    private:
+        string companyName;
+
+    public:
+        Employee_Parent(const string& empName, int empID, const string& pName, int pAge, const string& company)
+            : Employee(empName, empID), Parent(pName, pAge), companyName(company) {}
+        void displayInfo() const override {
+            Employee::displayInfo();
+            Parent::displayInfo();
+            cout << "Company Name: " << companyName << endl;
+        }
+
+        friend ostream& operator<<(ostream& os, const Employee_Parent& employeeParent);
+        friend istream& operator>>(istream& is, Employee_Parent& employeeParent);
+    };
+
+    ostream& operator<<(ostream& os, const Employee_Parent& employeeParent) {
+        os << static_cast<const Employee&>(employeeParent);
+        os << static_cast<const Parent&>(employeeParent);
+        os << "Company Name: " << employeeParent.companyName << endl;
+        return os;
+    }
+    istream& operator>>(istream& is, Employee_Parent& employeeParent) {
+        is >> static_cast<Employee&>(employeeParent);
+        is >> static_cast<Parent&>(employeeParent);
+        cout << "Enter Company Name: ";
+        is >> employeeParent.companyName;
+        return is;
+    }
 
     int mainExample3()
     {
-        AutoBus def;
-        AutoBus lvCh("Iveko", 6.2f, 6, 301, 40, "Lviv-Chernivci");
-        AutoBus* pVnCn = new AutoBus();
-        pVnCn->setMarka("Ikarus");
-        pVnCn->setPower(7.2f);
-        pVnCn->setNumberOfWheels(6);
-        pVnCn->setFlightNumber(403);
-        pVnCn->setnumberOfPassengerSeats(42);
-        pVnCn->setbusRoute("Vinnicya-Chernivci");
+        Employee_Parent empParent("John Doe", 1234, "Jane Smith", 35, "ABC Company");
+        empParent.displayInfo();
+        cout << endl;
+        cout << empParent << endl;
+        cin >> empParent;
+        cout << endl;
+        empParent.displayInfo();
 
-        cout << def.toString() << endl;
-        cout << lvCh.toString() << endl;
-        cout << pVnCn->toString() << endl;
         return 0;
     }
 
