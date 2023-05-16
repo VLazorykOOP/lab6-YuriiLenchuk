@@ -16,127 +16,126 @@ namespace SpaceExample1 {
         Base(int d) : dat(d) {}
     };
   
-    class D1 : protected Base
+    class L : protected Base
     {
     protected:
-        int d1;
+        int l;
     public:
-        D1() : d1(1) {}
-        D1(int d) : d1(d) {}
-        D1(int d, int dt) : Base(dt), d1(d) {}
+        L() : L(1) {}
+        L(int d) : l(d) {}
+        L(int d, int dt) : Base(dt), l(d) {}
     };
 
-    class D2 : protected Base
+    class R : protected Base
     {
     protected:
-        double d2;
+        double r;
     public:
-        D2() : d2(1) {}
-        D2(int d) : d2(d) {}
-        D2(int d, double dt) : Base(d), d2(dt) {}
+        R() : R(1) {}
+        R(int d) : r(d) {}
+        R(int d, double dt) : Base(d), r(dt) {}
     };
 
-    class D12 : protected D1, protected D2
+    class M1 : protected L, protected R
     {
     protected:
-        double dt;
+        double m1;
     public:
-        D12() : dt(1) {}
-        D12(int d) : dt(d) {}
-        D12(int a, int b, int c, double d, int e) : D1(a, b), D2(c, d), dt(e) {}
+        M1() : m1(1) {}
+        M1(int d) : m1(d) {}
+        M1(int a, int b, int c, double d, int e) : L(a, b), R(c, d), m1(e) {}
     };
 
-    class R : protected D12, protected Base
+    class M2 : protected L, protected R, protected M1
     {
     protected:
-        double dt;
+        double m2;
     public:
-        R() : dt(1) {}
-        R(int d) : dt(d) {}
-        R(int a, int b, int c, double d, int e) : D12(a, b, c, d, e), Base::Base(a), dt(e + 1.) {}
+        M2() : m2(1) {}
+        M2(int d) : m2(d) {}
+        M2(int a, int b, int c, double d, int e) : M1(a, b, c, d, e), L(a), R(b), m2(e + 1.) {}
         void showDat()
         {
             std::cout << "dat =? Error C2385 ambiguous access level dat " << std::endl;
             /// << dat << std::endl;
-          //  std::cout << "B12VV::D1V::Base::dat =  " << D12::D1::Base::dat << std::endl;
-           // std::cout << "B12VV::D1V::Base::dat =  " << Base::dat << std::endl;
-      //      std::cout << "B12VV::D1V::Base::dat =  " << D12::D2::Base::dat << std::endl;
+          //  std::cout << "B12VV::LV::Base::dat =  " << L2::L::Base::dat << std::endl;
+           // std::cout << "B12VV::LV::Base::dat =  " << Base::dat << std::endl;
+      //      std::cout << "B12VV::LV::Base::dat =  " << L2::R::Base::dat << std::endl;
         }
     };
     
     //
     //  virtual
     //
-    class D1V : virtual protected Base
+    class LV : virtual protected Base
     {
     protected:
-        int d1;
+        int l;
     public:
-        D1V() : d1(1) {}
-        D1V(int d) : d1(d) {}
-        D1V(int d, int dt) : Base(dt), d1(d) {}
+        LV() : LV(1) {}
+        LV(int d) : l(d) {}
+        LV(int d, int dt) : Base(dt), l(d) {}
     };
 
-    class D2V : virtual protected Base
+    class RV : virtual protected Base
     {
     protected:
-        double d2;
+        double r;
     public:
-        D2V() : d2(1) {}
-        D2V(int d) : d2(d) {}
-        D2V(int d, double dt) : Base(d), d2(dt) {}
+        RV() : RV(1) {}
+        RV(int d) : r(d) {}
+        RV(int d, double dt) : Base(d), r(dt) {}
     };
 
-    class D12VV : virtual protected D1V, virtual public D2V
+    class M1V : virtual protected LV, virtual protected RV
     {
     protected:
-        double dt;
+        double m1;
     public:
-        D12VV() : dt(1) {}
-        D12VV(int d) : dt(d) {}
-        D12VV(int a, int b, int c, double d, int e) : D1V(a, b), D2V(c, d), dt(e) {}
+        M1V() : m1(1) {}
+        M1V(int d) : m1(d) {}
+        M1V(int a, int b, int c, double d, int e) : LV(a, b), RV(c, d), m1(e) {}
     };
 
-    class RV3 : virtual protected D12VV, virtual public Base
+    class M2V : virtual protected LV, virtual protected RV, virtual protected M1V
     {
     protected:
-        double dt;
+        double m2;
     public:
-        RV3() : dt(1) {}
-        RV3(int d) : dt(d) {}
-        RV3(int a, int b, int c, double d, int e) : D12VV(a, b, c, d, e), Base::Base(a + 1),
-            dt(e + 1.0) {}
+        M2V() : m2(1) {}
+        M2V(int d) : m2(d) {}
+        M2V(int a, int b, int c, double d, int e) : M1V(a, b, c, d, e), LV(a), RV(b), m2(e + 1.) {}
         void showDat()
         {
-            std::cout << "  dat =  " << dat << std::endl;
-            std::cout << "B12VV::D1V::Base::dat =  " << D12VV::D1V::Base::dat << std::endl;
-            std::cout << "B12VV::D1V::Base::dat =  " << Base::dat << std::endl;
-            std::cout << "B12VV::D1V::Base::dat =  " << D12VV::D2V::Base::dat << std::endl;
+            std::cout << "  m1 =  " << m1 << std::endl;
+            std::cout << "M1V::LV::Base::dat =  " << M1V::LV::Base::dat << std::endl;
+            std::cout << "M1V::m1 =  " << M1V::m1 << std::endl;
+            std::cout << "M1V::RV::Base::dat =  " << M1V::RV::Base::dat << std::endl;
         }
     };
 
     int mainExample1()
     {
         std::cout << " Example1  \n";
-        R a, b(1, 2, 3, 4.5, 5);
-        RV3 av, bv(1, 2, 3, 4.5, 5);
+        M2 a, b(1, 2, 3, 4.5, 5);
+        M2V av, bv(1, 2, 3, 4.5, 5);
 
         std::cout << "Test !\n";
         std::cout << "Size for Base " << sizeof(Base) << std::endl;
-        std::cout << "Size for D1 " << sizeof(D1) << std::endl;
-        std::cout << "Size for D2 " << sizeof(D2) << std::endl;
-        std::cout << "Size for D12 " << sizeof(D12) << std::endl;
+        std::cout << "Size for L " << sizeof(L) << std::endl;
         std::cout << "Size for R " << sizeof(R) << std::endl;
+        std::cout << "Size for M1 " << sizeof(M1) << std::endl;
+        std::cout << "Size for M2 " << sizeof(M2) << std::endl;
 
         std::cout << "Size for Base " << sizeof(Base) << std::endl;
-        std::cout << "Size for D1V " << sizeof(D1V) << std::endl;
-        std::cout << "Size for D2V " << sizeof(D2V) << std::endl;
-        std::cout << "Size for D12VV " << sizeof(D12VV) << std::endl;
-        std::cout << "Size for RV3 " << sizeof(RV3) << std::endl;
+        std::cout << "Size for LV " << sizeof(LV) << std::endl;
+        std::cout << "Size for RV " << sizeof(RV) << std::endl;
+        std::cout << "Size for M1V " << sizeof(M1V) << std::endl;
+        std::cout << "Size for M2V " << sizeof(M2V) << std::endl;
 
-        std::cout << "Size for object class R " << sizeof(R) << " or  "
+        std::cout << "Size for object class M2 " << sizeof(M2) << " or  "
             << sizeof(a) << " or  " << sizeof(b) << std::endl;
-        std::cout << "Size for object class RV3 " << sizeof(RV3) << " or  "
+        std::cout << "Size for object class M2V " << sizeof(M2V) << " or  "
             << sizeof(av) << " or  " << sizeof(bv) << std::endl;
         b.showDat();
         bv.showDat();
