@@ -7,7 +7,7 @@ void MenuExample() {
 	std::cout << "    2   Example 2  \n";
 	std::cout << "    3   Example 3  \n";
 
-	std::cout << "    4 or e  Exit \n";
+	std::cout << "    4   Exit \n";
 
 }
 void Example()
