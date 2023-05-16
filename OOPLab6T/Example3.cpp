@@ -107,9 +107,8 @@ namespace SpaceExample3 {
         cin >> empParent;
         cout << endl;
         empParent.displayInfo();
-
+        cin.get();
         return 0;
     }
-
 
 }

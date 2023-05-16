@@ -27,7 +27,6 @@ void Example()
 		case '2':  SpaceExample2::mainExample2();   break;
 		case '3':  SpaceExample3::mainExample3();   break;
 		case '4':  return;
-		case 'e':  return;
 		}
 		std::cout << " Press any key and enter\n";
 		ch = std::cin.get();
