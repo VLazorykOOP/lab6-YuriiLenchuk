@@ -3,8 +3,6 @@
 using namespace std;
 namespace SpaceExample2 { 
     using namespace std;
-#include <iostream>
-#include <cmath>
 
     class Function {
     public:
